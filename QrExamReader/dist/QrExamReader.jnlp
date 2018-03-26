@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="QrExamReader.jnlp">
+  <information>
+    <title>QrExamReader</title>
+    <vendor>MONSTER</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="QrExamReader.jar" size="7026" download="eager" />
+    <jar href="lib\commons-logging-1.2-javadoc.jar" size="158448" download="eager" />
+    <jar href="lib\commons-logging-1.2.jar" size="61829" download="eager" />
+    <jar href="lib\fontbox-2.0.9.jar" size="1554777" download="eager" />
+    <jar href="lib\pdfbox-2.0.9.jar" size="2513383" download="eager" />
+    <jar href="lib\pdfbox-debugger-2.0.9.jar" size="237758" download="eager" />
+    <jar href="lib\pdfbox-tools-2.0.9.jar" size="72361" download="eager" />
+    <jar href="lib\preflight-2.0.9.jar" size="245750" download="eager" />
+    <jar href="lib\xmpbox-2.0.9.jar" size="131857" download="eager" />
+    <jar href="lib\zxing-1.7-javase.jar" size="22002" download="eager" />
+    <jar href="lib\zxing-core-2.0.jar" size="432773" download="eager" />
+  </resources>
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="QrExamReader" >
+    <param name="requiredFXVersion" value="8.0+"/>
+  </applet-desc>
+  <jfx:javafx-desc  width="800" height="600" main-class="qrexamreader.QrExamReader"  name="QrExamReader" />
+  <update check="always"/>
+</jnlp>
