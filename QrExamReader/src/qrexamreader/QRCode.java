@@ -6,12 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.imageio.ImageIO;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.NotFoundException;
@@ -22,28 +22,85 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import java.awt.image.BufferedImage;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class QRCode {
-
-  public static void main(String[] args) throws WriterException, IOException,
-      NotFoundException {
-    String filePath = "C:\\Users\\MONSTER\\Desktop\\qr.png";
-    String charset = "UTF-8"; // or "ISO-8859-1"
-    Map<EncodeHintType, ErrorCorrectionLevel> hintMap = new HashMap<EncodeHintType, ErrorCorrectionLevel>();
-    hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+public final class QRCode {
     
-    System.out.println("Data read from QR Code: "
-        + readQRCode(filePath, charset, hintMap));
+    public String examName;
+    public String examDate;
+    public String examType;
+    public int examPageNumber;
+    public String studentName;
+    public int studentID;
+    public ArrayList<String> questions = new ArrayList();
+    
+    public QRCode(File file) throws IOException{
+        decodeQRCode(file);
+    }
+    
+    /**
+     *
+     * @param newExamName
+     * @param newDate
+     * @param newExamType
+     * @param newPageNumber
+     * @param newStudentName
+     * @param newStudentID
+     * @param newQuestions
+     */
+    public void writeInfo(String newExamName, String newDate, String newExamType, int newPageNumber, String newStudentName, int newStudentID, ArrayList<String> newQuestions){
+        this.examName = newExamName;
+        this.examDate = newDate;
+        this.examType = newExamType;
+        this.examPageNumber = newPageNumber;
+        this.studentName = newStudentName;
+        this.studentID = newStudentID;
+        this.questions = newQuestions;
+    }
+    
+    public void decodeQRCode(File qrCodeimage) throws IOException {
+        BufferedImage bufferedImage = ImageIO.read(qrCodeimage);
+        LuminanceSource source = new BufferedImageLuminanceSource(bufferedImage);
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 
-  }
-
-  public static String readQRCode(String filePath, String charset, Map hintMap)
-      throws FileNotFoundException, IOException, NotFoundException {
-    BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(
-        new BufferedImageLuminanceSource(
-            ImageIO.read(new FileInputStream(filePath)))));
-    Result qrCodeResult = new MultiFormatReader().decode(binaryBitmap,
-        hintMap);
-    return qrCodeResult.getText();
-  }
+        try {
+            Result result = new MultiFormatReader().decode(bitmap);
+            splitResult(result.getText());
+        } catch (NotFoundException e) {
+            System.out.println("There is no QR code in the image");
+        }
+    }
+    
+    public void splitResult(String qrText){
+        String parts[] = qrText.split(",");
+        String newExamName = parts[0];
+        SimpleDateFormat ft = new SimpleDateFormat ("dd.MM.yyyy");
+        String newDate = parts[1];
+        String newExamType = parts[2];
+        int newPageNumber = Integer.parseInt(parts[3]);
+        String newStudentName = parts[4];
+        int newStudentID = Integer.parseInt(parts[5]);
+        ArrayList<String> newQuestions = new ArrayList();
+        for(int i = 6; i<parts.length; i++){
+            newQuestions.add(parts[i]);
+        }
+        writeInfo(newExamName, newDate, newExamType, newPageNumber, newStudentName, newStudentID, newQuestions);
+    }
+    
+    public String toString(){
+        return String.format("Exam Name : " + this.examName + "\n"
+                            + "Exam Date : " + this.examDate + "\n"
+                            + "Exam Type : " + this.examType + "\n"
+                            + "Exam-Page Number : " + this.examPageNumber + "\n"
+                            + "Student Name : " + this.studentName + "\n"
+                            + "Student ID : " + this.studentID + "\n");
+    }
+    
 }

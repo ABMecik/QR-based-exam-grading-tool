@@ -18,10 +18,13 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="choosePdfPathBtn" layoutX="36.0" layoutY="88.0" prefHeight="25.0" prefWidth="160.0" text="Choose PDF Directory" />
-                        <Button fx:id="choosePdfFileBtn" layoutX="36.0" layoutY="129.0" prefHeight="25.0" prefWidth="160.0" text="Choose PDF File" />
-                        <Button fx:id="choosePngPathBtn" layoutX="257.0" layoutY="88.0" prefHeight="25.0" prefWidth="160.0" text="Choose PNG Directory" />
-                        <Text layoutX="36.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="OR" textAlignment="CENTER" wrappingWidth="159.13671875" />
+                        <Button fx:id="choosePdfPathBtn" layoutX="50.0" layoutY="80.0" prefHeight="25.0" prefWidth="160.0" text="Choose PDF Directory" />
+                        <Button fx:id="choosePdfFileBtn" layoutX="50.0" layoutY="129.0" prefHeight="25.0" prefWidth="160.0" text="Choose PDF File" />
+                        <Button fx:id="chooseDataPathBtn" disable="true" layoutX="250.0" layoutY="80.0" prefHeight="25.0" prefWidth="160.0" text="Save Data Directory" />
+                        <Text fontSmoothingType="LCD" layoutX="50.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="----OR----" textAlignment="CENTER" wrappingWidth="159.13671875">
+                           <font>
+                              <Font size="20.0" />
+                           </font></Text>
                      </children>
                   </AnchorPane>
             </content>
