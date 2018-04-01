@@ -56,13 +56,13 @@ public final class QRCode {
      * @param newQuestions
      */
     public void writeInfo(String newExamName, String newDate, String newExamType, int newPageNumber, String newStudentName, int newStudentID, ArrayList<String> newQuestions){
-        this.examName = newExamName;
-        this.examDate = newDate;
-        this.examType = newExamType;
-        this.examPageNumber = newPageNumber;
-        this.studentName = newStudentName;
-        this.studentID = newStudentID;
-        this.questions = newQuestions;
+        examName = newExamName;
+        examDate = newDate;
+        examType = newExamType;
+        examPageNumber = newPageNumber;
+        studentName = newStudentName;
+        studentID = newStudentID;
+        questions = newQuestions;
     }
     
     public void decodeQRCode(File qrCodeimage) throws IOException {
@@ -95,12 +95,12 @@ public final class QRCode {
     }
     
     public String toString(){
-        return String.format("Exam Name : " + this.examName + "\n"
-                            + "Exam Date : " + this.examDate + "\n"
-                            + "Exam Type : " + this.examType + "\n"
-                            + "Exam-Page Number : " + this.examPageNumber + "\n"
-                            + "Student Name : " + this.studentName + "\n"
-                            + "Student ID : " + this.studentID + "\n");
+        return String.format("Exam Name : " + examName + "\n"
+                            + "Exam Date : " + examDate + "\n"
+                            + "Exam Type : " + examType + "\n"
+                            + "Exam-Page Number : " + examPageNumber + "\n"
+                            + "Student Name : " + studentName + "\n"
+                            + "Student ID : " + studentID + "\n");
     }
     
 }

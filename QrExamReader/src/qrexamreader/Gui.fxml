@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.geometry.*?>
@@ -21,6 +22,7 @@
                         <Button fx:id="choosePdfPathBtn" layoutX="50.0" layoutY="80.0" prefHeight="25.0" prefWidth="160.0" text="Choose PDF Directory" />
                         <Button fx:id="choosePdfFileBtn" layoutX="50.0" layoutY="129.0" prefHeight="25.0" prefWidth="160.0" text="Choose PDF File" />
                         <Button fx:id="chooseDataPathBtn" disable="true" layoutX="250.0" layoutY="80.0" prefHeight="25.0" prefWidth="160.0" text="Save Data Directory" />
+                        <Button fx:id="executeDataBtn" disable="true" layoutX="450.0" layoutY="80.0" prefHeight="25.0" prefWidth="160.0" text="Execute" />
                         <Text fontSmoothingType="LCD" layoutX="50.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="----OR----" textAlignment="CENTER" wrappingWidth="159.13671875">
                            <font>
                               <Font size="20.0" />
@@ -29,9 +31,25 @@
                   </AnchorPane>
             </content>
           </TitledPane>
-          <TitledPane animated="false" text="untitled 2">
+          <TitledPane animated="false" text="Grade Exam">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="questionImage" fitHeight="430.0" fitWidth="920.0" pickOnBounds="true" preserveRatio="true" />
+                        <TextArea fx:id="questionPrompt" layoutX="390.0" layoutY="497.0" prefHeight="121.0" prefWidth="365.0" promptText="Leave your comments here...." />
+                        <Text layoutX="56.0" layoutY="510.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Student Name : " />
+                        <Text layoutX="56.0" layoutY="540.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Student ID : " />
+                        <Text layoutX="56.0" layoutY="570.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Question : " />
+                        <Text layoutX="56.0" layoutY="600.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Grade : " />
+                        <Text fx:id="studentNameText" layoutX="160.0" layoutY="510.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+                        <Text fx:id="studentIDText" layoutX="160.0" layoutY="540.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+                        <Text fx:id="questionText" layoutX="160.0" layoutY="570.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+                        <Text fx:id="sumOfGradeText" layoutX="160.0" layoutY="600.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+                        <Text layoutX="821.0" layoutY="540.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Question Grade" textAlignment="CENTER" wrappingWidth="150" />
+                        <TextField fx:id="maxGradePromptText" layoutX="821.0" layoutY="553.0" promptText="" />
+                        <Button fx:id="nextBtn" layoutX="895.0" layoutY="591.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Next" />
+                        <Button fx:id="prevBtn" layoutX="820.0" layoutY="591.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Previous" />
+                     </children></AnchorPane>
             </content>
           </TitledPane>
           <TitledPane animated="false" text="untitled 3">
