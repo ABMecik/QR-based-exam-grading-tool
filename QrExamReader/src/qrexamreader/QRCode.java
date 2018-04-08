@@ -44,6 +44,17 @@ public final class QRCode {
     public QRCode(File file) throws IOException{
         decodeQRCode(file);
     }
+
+    QRCode(String newExamName, String newDate, String newExamType, int newPageNumber, String newStudentName, int newStudentID, ArrayList<String> newQuestions) {
+        examName = newExamName;
+        examDate = newDate;
+        examType = newExamType;
+        examPageNumber = newPageNumber;
+        studentName = newStudentName;
+        studentID = newStudentID;
+        questions = newQuestions;
+    }
+
     
     /**
      *

@@ -19,14 +19,39 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="choosePdfPathBtn" layoutX="50.0" layoutY="80.0" prefHeight="25.0" prefWidth="160.0" text="Choose PDF Directory" />
-                        <Button fx:id="choosePdfFileBtn" layoutX="50.0" layoutY="129.0" prefHeight="25.0" prefWidth="160.0" text="Choose PDF File" />
-                        <Button fx:id="chooseDataPathBtn" disable="true" layoutX="250.0" layoutY="80.0" prefHeight="25.0" prefWidth="160.0" text="Save Data Directory" />
-                        <Button fx:id="executeDataBtn" disable="true" layoutX="450.0" layoutY="80.0" prefHeight="25.0" prefWidth="160.0" text="Execute" />
-                        <Text fontSmoothingType="LCD" layoutX="50.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="----OR----" textAlignment="CENTER" wrappingWidth="159.13671875">
-                           <font>
-                              <Font size="20.0" />
-                           </font></Text>
+                        <Button fx:id="choosePdfPathBtn" layoutX="252.0" layoutY="412.0" prefHeight="25.0" prefWidth="160.0" text="Choose Exam File">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="choosePdfFileBtn" layoutX="252.0" layoutY="380.0" prefHeight="25.0" prefWidth="160.0" text="Choose Exam">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="chooseDataPathBtn" disable="true" layoutX="252.0" layoutY="456.0" prefHeight="25.0" prefWidth="160.0" text="Save to">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="executeDataBtn" disable="true" layoutX="452.5" layoutY="520.0" prefHeight="25.0" prefWidth="160.0" text="Start">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="newExamButton" layoutX="452.5" layoutY="560.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="160.0" text="New Exam">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                        <Button fx:id="excelOptionBtn" layoutX="452.5" layoutY="600.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="160.0" text="Results in Excel">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                        <TextField fx:id="pdfFilePathText" alignment="CENTER" editable="false" layoutX="420.0" layoutY="396" prefHeight="25.0" prefWidth="346.0" />
+                        <ImageView fx:id="logoImage" fitHeight="319.0" fitWidth="466.0" layoutX="279.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@logo.png" />
+                           </image></ImageView>
+                        <TextField fx:id="saveToPathText" alignment="CENTER" editable="false" layoutX="420.0" layoutY="456.0" prefHeight="25.0" prefWidth="348.0" />
+                        
                      </children>
                   </AnchorPane>
             </content>
@@ -41,14 +66,22 @@
                         <Text layoutX="56.0" layoutY="540.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Student ID : " />
                         <Text layoutX="56.0" layoutY="570.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Question : " />
                         <Text layoutX="56.0" layoutY="600.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Grade : " />
-                        <Text fx:id="studentNameText" layoutX="160.0" layoutY="510.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
-                        <Text fx:id="studentIDText" layoutX="160.0" layoutY="540.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
-                        <Text fx:id="questionText" layoutX="160.0" layoutY="570.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
-                        <Text fx:id="sumOfGradeText" layoutX="160.0" layoutY="600.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+                        <Text layoutX="56.0" layoutY="630.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Grade:" />
+                        <Text fx:id="studentNameText" layoutX="170.0" layoutY="510.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+                        <Text fx:id="studentIDText" layoutX="170.0" layoutY="540.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+                        <Text fx:id="questionText" layoutX="170.0" layoutY="570.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+                        <Text fx:id="sumOfGradeText" layoutX="170.0" layoutY="600.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+                        <Text fx:id="questPointText" layoutX="170.0" layoutY="630.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
                         <Text layoutX="821.0" layoutY="540.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Question Grade" textAlignment="CENTER" wrappingWidth="150" />
                         <TextField fx:id="maxGradePromptText" layoutX="821.0" layoutY="553.0" promptText="" />
-                        <Button fx:id="nextBtn" layoutX="895.0" layoutY="591.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Next" />
-                        <Button fx:id="prevBtn" layoutX="820.0" layoutY="591.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Previous" />
+                        <Button fx:id="nextBtn" layoutX="895.0" layoutY="591.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Next">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="prevBtn" layoutX="820.0" layoutY="591.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Previous">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
                      </children></AnchorPane>
             </content>
           </TitledPane>
