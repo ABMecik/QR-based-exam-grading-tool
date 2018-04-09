@@ -1,0 +1,13 @@
+/Users/volkanozer/Desktop/ExamExample.pdf
+null
+[/Users/volkanozer/Desktop/pdf-png/data/allExamPages/Page -1.png, /Users/volkanozer/Desktop/pdf-png/data/allExamPages/Page -2.png, /Users/volkanozer/Desktop/pdf-png/data/allExamPages/Page -3.png, /Users/volkanozer/Desktop/pdf-png/data/allExamPages/Page -4.png, /Users/volkanozer/Desktop/pdf-png/data/allExamPages/Page -5.png, /Users/volkanozer/Desktop/pdf-png/data/allExamPages/Page -6.png]
+/Users/volkanozer/Desktop/pdf-png/data/allExamPages
+/Users/volkanozer/Desktop/pdf-png/data
+[/Users/volkanozer/Desktop/pdf-png/data\COMP204\Midterm\Ilkay Tevfik Devran/question-1.png, /Users/volkanozer/Desktop/pdf-png/data\COMP204\Midterm\Ilkay Tevfik Devran/question-2.png, /Users/volkanozer/Desktop/pdf-png/data\COMP204\Midterm\Ilkay Tevfik Devran/question-3.png, /Users/volkanozer/Desktop/pdf-png/data\COMP204\Midterm\Ilkay Tevfik Devran/question-4.png, /Users/volkanozer/Desktop/pdf-png/data\COMP204\Midterm\Ilkay Tevfik Devran/question-5.png, /Users/volkanozer/Desktop/pdf-png/data\COMP204\Midterm\Muhammed Kostekli/question-1.png, /Users/volkanozer/Desktop/pdf-png/data\COMP204\Midterm\Muhammed Kostekli/question-2.png, /Users/volkanozer/Desktop/pdf-png/data\COMP204\Midterm\Muhammed Kostekli/question-3.png, /Users/volkanozer/Desktop/pdf-png/data\COMP204\Midterm\Muhammed Kostekli/question-4.png, /Users/volkanozer/Desktop/pdf-png/data\COMP204\Midterm\Muhammed Kostekli/question-5.png, /Users/volkanozer/Desktop/pdf-png/data\COMP204\Midterm\Uluc Furkan Vardar/question-1.png, /Users/volkanozer/Desktop/pdf-png/data\COMP204\Midterm\Uluc Furkan Vardar/question-2.png, /Users/volkanozer/Desktop/pdf-png/data\COMP204\Midterm\Uluc Furkan Vardar/question-3.png, /Users/volkanozer/Desktop/pdf-png/data\COMP204\Midterm\Uluc Furkan Vardar/question-4.png, /Users/volkanozer/Desktop/pdf-png/data\COMP204\Midterm\Uluc Furkan Vardar/question-5.png]
+[10, 30, 20, 25, 15, 10, 30, 20, 25, 15, 10, 30, 20, 25, 15]
+[1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
+/Users/volkanozer/Desktop/pdf-png
+Midterm
+1
+0
+COMP204$20.03.2018$M$1$Ilkay Tevfik Devran$345656$[1.1.10.%28.45, 1.2.30.%63.26, 1.3.20.%76.8]@COMP204$20.03.2018$M$2$Ilkay Tevfik Devran$345656$[2.4.25.%8.47, 2.5.15.%53.1]@COMP204$20.03.2018$M$1$Muhammed Kostekli$34598$[1.1.10.%28.45, 1.2.30.%63.26, 1.3.20.%76.8]@COMP204$20.03.2018$M$2$Muhammed Kostekli$34598$[2.4.25.%8.47, 2.5.15.%53.1]@COMP204$20.03.2018$M$1$Uluc Furkan Vardar$12345$[1.1.10.%28.45, 1.2.30.%63.26, 1.3.20.%76.8]@COMP204$20.03.2018$M$2$Uluc Furkan Vardar$12345$[2.4.25.%8.47, 2.5.15.%53.1]@

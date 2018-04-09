@@ -19,11 +19,11 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="choosePdfPathBtn" layoutX="252.0" layoutY="412.0" prefHeight="25.0" prefWidth="160.0" text="Choose Exam File">
+                        <Button fx:id="choosePdfPathBtn" disable="true" layoutX="252.0" layoutY="412.0" prefHeight="25.0" prefWidth="160.0" text="Choose Exam File">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor></Button>
-                        <Button fx:id="choosePdfFileBtn" layoutX="252.0" layoutY="380.0" prefHeight="25.0" prefWidth="160.0" text="Choose Exam">
+                        <Button fx:id="choosePdfFileBtn" disable="true" layoutX="252.0" layoutY="380.0" prefHeight="25.0" prefWidth="160.0" text="Choose Exam">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor></Button>
@@ -40,7 +40,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button fx:id="excelOptionBtn" layoutX="452.5" layoutY="600.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="160.0" text="Results in Excel">
+                        <Button fx:id="excelOptionBtn" disable="true" layoutX="452.5" layoutY="600.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="160.0" text="Results in Excel">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -56,12 +56,12 @@
                   </AnchorPane>
             </content>
           </TitledPane>
-          <TitledPane animated="false" text="Grade Exam">
+          <TitledPane fx:id="menuGradePane" animated="false" disable="true" text="Grade Exam">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <ImageView fx:id="questionImage" fitHeight="430.0" fitWidth="920.0" pickOnBounds="true" preserveRatio="true" />
-                        <TextArea fx:id="questionPrompt" layoutX="390.0" layoutY="497.0" prefHeight="121.0" prefWidth="365.0" promptText="Leave your comments here...." />
+                        <TextArea fx:id="questionCommentText" layoutX="390.0" layoutY="497.0" prefHeight="121.0" prefWidth="365.0" promptText="Leave your comments here...." />
                         <Text layoutX="56.0" layoutY="510.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Student Name : " />
                         <Text layoutX="56.0" layoutY="540.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Student ID : " />
                         <Text layoutX="56.0" layoutY="570.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Question : " />
@@ -85,16 +85,16 @@
                      </children></AnchorPane>
             </content>
           </TitledPane>
-          <TitledPane animated="false" text="untitled 3">
+          <TitledPane fx:id="menuGraphPane" animated="false" disable="true" text="Graph">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <LineChart layoutX="42.0" layoutY="41.0" prefHeight="597.0" prefWidth="562.0">
+                        <LineChart fx:id="gradeGraph" layoutX="42.0" layoutY="33.0" prefHeight="605.0" prefWidth="683.0" title="Student Grades">
                           <xAxis>
-                            <CategoryAxis side="BOTTOM" />
+                            <CategoryAxis side="BOTTOM" fx:id="xLine" />
                           </xAxis>
                           <yAxis>
-                            <NumberAxis side="LEFT" />
+                            <NumberAxis fx:id="yLine" prefHeight="482.0" prefWidth="28.0" side="LEFT" upperBound="95.0" />
                           </yAxis>
                         </LineChart>
                      </children>
