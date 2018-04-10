@@ -1,6 +1,8 @@
 package qrexamreader;
 
+import com.google.zxing.NotFoundException;
 import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -37,12 +39,23 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.util.Map.Entry;
+import java.util.Set;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TitledPane;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
+import javafx.stage.Window;
+import javax.swing.JOptionPane;
 
 
 /* PDF BOX */
@@ -118,6 +131,9 @@ public class GuiController implements Initializable {
     private TextField pdfFilePathText;
 
     @FXML
+    private TextField studentsGrades;
+
+    @FXML
     private TextField saveToPathText;
 
     @FXML
@@ -130,13 +146,16 @@ public class GuiController implements Initializable {
     private TitledPane menuGraphPane;
 
     @FXML
-    private LineChart<?, ?> gradeGraph;
+    private BarChart<?, ?> gradeGraph;
 
     @FXML
     private CategoryAxis xLine;
 
     @FXML
     private NumberAxis yLine;
+
+    @FXML
+    private TextArea questionCommentText;
 
     private static String OS = System.getProperty("os.name").toLowerCase();
 
@@ -159,8 +178,12 @@ public class GuiController implements Initializable {
     public PrintWriter writer = null;
     public File dataFile = new File("data.txt");
     public File positionFile = new File("position.txt");
+    public File commentFile = new File("exam_comments.txt");
+    public String commentFilePath = null;
+    public HashMap<Integer, String> commentMap = new HashMap<Integer, String>();
     public int numberOfQuestion = 0;
     public int solvedQuestionCounter = 0;
+    public int QRError = -1;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -185,6 +208,7 @@ public class GuiController implements Initializable {
             }
         } else {
             try {
+                menuGradePane.setDisable(false);
                 loadData();
                 setPage();
             } catch (FileNotFoundException ex) {
@@ -226,7 +250,7 @@ public class GuiController implements Initializable {
             if (isWindows()) {
                 excelFilePath = dataFolderPath.getAbsolutePath() + "\\" + "Result.xslx";
             } else if (isMac()) {
-                excelFilePath = dataFolderPath.getAbsolutePath() + "\\" + "Result.xslx";
+                excelFilePath = dataFolderPath.getAbsolutePath() + "/" + "Result.xslx";
             }
             try {
                 excelWriter.writeExcel(excelFilePath);
@@ -239,72 +263,7 @@ public class GuiController implements Initializable {
         });
 
         newExamButton.setOnAction((ActionEvent event) -> {
-            menuGraphPane.setDisable(true);
-            menuGradePane.setDisable(true);
-            pdfFilePathText.setText(null);
-            saveToPathText.setText(null);
-            executeDataBtn.setDisable(false);
-            choosePdfFileBtn.setDisable(false);
-            choosePdfPathBtn.setDisable(false);
-            excelOptionBtn.setDisable(true);
-            pdfFilePath = null;
-            pdfFolderPath = null;
-            pagePath = new ArrayList();
-            openQR = new ArrayList();
-            pngFolderPath = null;
-            dataFolderPath = null;
-            allQuestions = new ArrayList();
-            questionsMaxPoints = new ArrayList();
-            questionsNumber = new ArrayList();
-            currentQR = 0;
-            currentQuestion = 0;
-            currentPosition = 0;
-            questionsPoints = new ArrayList();
-            selectedDirectory = null;
-            examType = null;
-            map = new HashMap<String, Integer>();
-            writer = null;
-            dataFile = new File("data.txt");
-            positionFile = new File("position.txt");
-            numberOfQuestion = 0;
-            solvedQuestionCounter = 0;
-
-            if (!dataFile.exists()) {
-                try {
-                    writer = new PrintWriter(dataFile);
-                    writer.close();
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } else {
-                try {
-                    dataFile.delete();
-                    writer = new PrintWriter(dataFile);
-                    writer.close();
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            if (!positionFile.exists()) {
-                try {
-                    writer = new PrintWriter(positionFile);
-                    writer.close();
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } else {
-                try {
-                    positionFile.delete();
-                    writer = new PrintWriter(positionFile);
-                    writer.close();
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            setEndPage();
-
+            resetAllData();
         });
 
         if (isWindows()) {
@@ -355,12 +314,12 @@ public class GuiController implements Initializable {
             });
 
             executeDataBtn.setOnAction((ActionEvent event) -> {
-                String newPngPath2 = selectedDirectory + "\\data";
+                String newPngPath2 = selectedDirectory + "\\Exam";
                 dataFolderPath = new File(newPngPath2);
                 if (!dataFolderPath.exists()) {
                     dataFolderPath.mkdir();
                 }
-                String newPngPath1 = selectedDirectory + "\\data\\allExamPages";
+                String newPngPath1 = selectedDirectory + "\\Exam\\allExamPages";
                 pngFolderPath = new File(newPngPath1);
                 if (!pngFolderPath.exists()) {
                     pngFolderPath.mkdir();
@@ -383,9 +342,14 @@ public class GuiController implements Initializable {
                     } catch (IOException ex) {
                         Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
                 } else {
                     System.out.println("error");
+                }
+
+                if (QRError != -1) {
+                    resetAllData();
+                    popupError();
+                    return;
                 }
 
                 try {
@@ -394,9 +358,9 @@ public class GuiController implements Initializable {
                     Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 setPage();
+                countTotalQuestion();
                 storeData();
                 storeCurrentInfo();
-                countTotalQuestion();
                 menuGradePane.setDisable(false);
                 executeDataBtn.setDisable(true);
 
@@ -450,12 +414,12 @@ public class GuiController implements Initializable {
             });
 
             executeDataBtn.setOnAction((ActionEvent event) -> {
-                String newPngPath2 = selectedDirectory + "/data";
+                String newPngPath2 = selectedDirectory + "/Exam";
                 dataFolderPath = new File(newPngPath2);
                 if (!dataFolderPath.exists()) {
                     dataFolderPath.mkdir();
                 }
-                String newPngPath1 = selectedDirectory + "/data/allExamPages";
+                String newPngPath1 = selectedDirectory + "/Exam/allExamPages";
                 pngFolderPath = new File(newPngPath1);
                 if (!pngFolderPath.exists()) {
                     pngFolderPath.mkdir();
@@ -483,15 +447,21 @@ public class GuiController implements Initializable {
                     System.out.println("error");
                 }
 
+                if (QRError != -1) {
+                    resetAllData();
+                    popupError();
+                    return;
+                }
+
                 try {
                     splitPage();
                 } catch (IOException ex) {
                     Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 setPage();
+                countTotalQuestion();
                 storeData();
                 storeCurrentInfo();
-                countTotalQuestion();
                 menuGradePane.setDisable(false);
                 executeDataBtn.setDisable(true);
 
@@ -534,7 +504,14 @@ public class GuiController implements Initializable {
                 if (Integer.parseInt(maxGradePromptText.getText()) > Integer.parseInt(part[2])) {
                     return;
                 }
-
+                if (isWindows()) {
+                    commentFilePath = dataFolderPath.getAbsolutePath() + "\\" + "exam_comments.txt";
+                } else if (isMac()) {
+                    commentFilePath = dataFolderPath.getAbsolutePath() + "/" + "exam_comments.txt";
+                }
+                if (questionCommentText.getText() != null) {
+                    storeComment();
+                }
                 setGradeScreen();
                 if (currentQuestion == openQR.get(currentQR).questions.size() - 1) {
                     currentQR++;
@@ -555,22 +532,11 @@ public class GuiController implements Initializable {
                     setEndPage();
                     return;
                 }
+
                 currentPosition++;
-                setPage();
                 storeCurrentInfo();
-            } else if (maxGradePromptText.getText().isEmpty()) {
-                if (currentPosition < questionsPoints.size()) {
-                    if (currentQuestion == openQR.get(currentQR).questions.size() - 1) {
-                        currentQR++;
-                        currentQuestion = 0;
-                    } else {
-                        currentQuestion++;
-                    }
-                    currentPosition++;
-                    setPage();
-                } else {
-                    return;
-                }
+                setPage();
+
             } else {
                 return;
             }
@@ -598,6 +564,13 @@ public class GuiController implements Initializable {
             k++;
         }
         gradeGraph.getData().addAll(series);
+        StringBuilder allStudentsGrades = null;
+
+        for (String key : map.keySet()) {
+            studentsGrades.setText(studentsGrades.getText() + key + ":" + String.valueOf(map.get(key)) + "\n");
+        }
+
+        //studentsGrades
         /*
         int k = 0;
         for(int value : map.values()){
@@ -610,6 +583,7 @@ public class GuiController implements Initializable {
         for (QRCode code : openQR) {
             solvedQuestionCounter += code.questions.size();
         }
+        System.out.println("--->" + solvedQuestionCounter);
     }
 
     private void loadCurrentInfo() throws FileNotFoundException, IOException {
@@ -802,6 +776,7 @@ public class GuiController implements Initializable {
         Image newImageView = new Image("file:" + allQuestions.get(currentPosition));
         questionImage.setImage(newImageView);
 
+        questionCommentText.setText(null);
         maxGradePromptText.setText(null);
     }
 
@@ -820,6 +795,41 @@ public class GuiController implements Initializable {
         } else {
             return false;
         }
+    }
+
+    private void storeComment() {
+        FileWriter fw;
+        try {
+            fw = new FileWriter(commentFilePath, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(openQR.get(currentQR).studentName);
+            bw.write("'s ");
+            bw.write("Question ");
+            String parts[] = openQR.get(currentQR).questions.get(currentQuestion).split("\\.");
+            bw.write(parts[0] + "." + parts[1]);
+            bw.newLine();
+            bw.write("Comment: ");
+            bw.write(questionCommentText.getText());
+            bw.newLine();
+
+            bw.close();
+        } catch (IOException ex) {
+            Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        /*
+        try {
+            writer = new PrintWriter(commentFilePath);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        commentMap.put(currentPosition, questionCommentText.getText());
+        Set<Entry<Integer, String>> comments = commentMap.entrySet();
+        writer.println("COMMENTS");
+        for (Entry<Integer, String> comment : comments) {
+            writer.println(comment.getKey() + " ==> " + comment.getValue());
+        }
+         */
     }
 
     private static boolean isWindows() {
@@ -850,8 +860,8 @@ public class GuiController implements Initializable {
             PDFRenderer pdfRenderer = new PDFRenderer(document);
             for (int page = 0; page < document.getNumberOfPages(); ++page) {
                 BufferedImage bim = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
-                ImageIOUtil.writeImage(bim, outputPngPath + "/Page " + "-" + (page + 1) + ".png", 300);
-                String pathX = outputPngPath + "/Page " + "-" + (page + 1) + ".png";
+                ImageIOUtil.writeImage(bim, outputPngPath + "/Page" + (page + 1) + ".png", 300);
+                String pathX = outputPngPath + "/Page" + (page + 1) + ".png";
                 File pageFile = new File(pathX);
                 pagePath.add(pageFile);
                 System.out.println("page" + (page + 1) + " finished...");
@@ -877,12 +887,30 @@ public class GuiController implements Initializable {
                 }
                 File outputPath = new File(pathX);
                 ImageIO.write(croppedImage, "png", outputPath);
-                openQR.add(new QRCode(outputPath));
+
+                try {
+                    openQR.add(new QRCode(outputPath));
+                } catch (NotFoundException ex) {
+                    //Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("Invalid qr pages");
+                    QRError = i;
+                    break;
+                }
+
                 i++;
                 outputPath.delete();
                 /* Remove qr code */
             }
         }
+    }
+
+    private void popupError() {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Error Occured");
+        alert.setHeaderText("Unreadable QR Code - Error: 8V2A2B");
+        alert.setContentText("Please select pages with a valid QR code" + "\n" +
+                "Error at page: " + (QRError+1));
+        alert.showAndWait();
     }
 
     private void control() {
@@ -913,30 +941,15 @@ public class GuiController implements Initializable {
                         examType = "Final";
                     }
                     String newPath = null;
-                    if (isWindows()) {
-                        String newDir = dataFolderPath.getAbsolutePath() + "\\"
-                                + openQR.get(i).examName + "\\"
-                                + examType + "\\"
-                                + openQR.get(i).studentName;
+                    String newDir = dataFolderPath.getAbsolutePath() + "\\"
+                            + "Students" + "\\"
+                            + openQR.get(i).studentName;
 
-                        File theDir = new File(newDir);
-                        if (!theDir.exists()) {
-                            theDir.mkdirs();
-                        }
-                        newPath = newDir + "\\" + "question-" + questionNumber + ".png";
-                    } else if (isMac()) {
-                        String newDir = dataFolderPath.getAbsolutePath() + "/"
-                                + openQR.get(i).examName + "/"
-                                + examType + "/"
-                                + openQR.get(i).studentName;
-
-                        File theDir = new File(newDir);
-                        if (!theDir.exists()) {
-                            theDir.mkdirs();
-                        }
-                        newPath = newDir + "/" + "question-" + questionNumber + ".png";
-                    } else {
+                    File theDir = new File(newDir);
+                    if (!theDir.exists()) {
+                        theDir.mkdirs();
                     }
+                    newPath = newDir + "\\" + "question" + questionNumber + ".png";
                     allQuestions.add(newPath);
                     if (k == openQR.get(i).questions.size() - 1) {
                         int start = (int) (((float) height / 100) * questFloat);
@@ -970,15 +983,14 @@ public class GuiController implements Initializable {
                     } else {
                         examType = "Final";
                     }
-                    String newDir = dataFolderPath.getAbsolutePath() + "\\"
-                            + openQR.get(i).examName + "\\"
-                            + examType + "\\"
+                    String newDir = dataFolderPath.getAbsolutePath() + "/"
+                            + "Students" + "/"
                             + openQR.get(i).studentName;
                     File theDir = new File(newDir);
                     if (!theDir.exists()) {
                         theDir.mkdirs();
                     }
-                    String newPath = newDir + "/" + "question-" + questionNumber + ".png";
+                    String newPath = newDir + "/" + "question" + questionNumber + ".png";
                     allQuestions.add(newPath);
                     if (k == openQR.get(i).questions.size() - 1) {
                         int start = (int) (((float) height / 100) * questFloat);
@@ -1003,4 +1015,75 @@ public class GuiController implements Initializable {
         }
         System.out.println("Success...");
     }
+
+    private void resetAllData() {
+        System.out.println("Reset Done...");
+        menuGraphPane.setDisable(true);
+        menuGradePane.setDisable(true);
+        pdfFilePathText.setText(null);
+        saveToPathText.setText(null);
+        executeDataBtn.setDisable(false);
+        choosePdfFileBtn.setDisable(false);
+        choosePdfPathBtn.setDisable(false);
+        excelOptionBtn.setDisable(true);
+        commentMap = new HashMap<Integer, String>();
+        pdfFilePath = null;
+        pdfFolderPath = null;
+        pagePath = new ArrayList();
+        openQR = new ArrayList();
+        pngFolderPath = null;
+        dataFolderPath = null;
+        allQuestions = new ArrayList();
+        questionsMaxPoints = new ArrayList();
+        questionsNumber = new ArrayList();
+        currentQR = 0;
+        currentQuestion = 0;
+        currentPosition = 0;
+        questionsPoints = new ArrayList();
+        selectedDirectory = null;
+        examType = null;
+        map = new HashMap<String, Integer>();
+        writer = null;
+        dataFile = new File("data.txt");
+        positionFile = new File("position.txt");
+        numberOfQuestion = 0;
+        solvedQuestionCounter = 0;
+
+        if (!dataFile.exists()) {
+            try {
+                writer = new PrintWriter(dataFile);
+                writer.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            try {
+                dataFile.delete();
+                writer = new PrintWriter(dataFile);
+                writer.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        if (!positionFile.exists()) {
+            try {
+                writer = new PrintWriter(positionFile);
+                writer.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            try {
+                positionFile.delete();
+                writer = new PrintWriter(positionFile);
+                writer.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        setEndPage();
+    }
+
 }

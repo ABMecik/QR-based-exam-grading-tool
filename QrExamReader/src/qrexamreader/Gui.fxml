@@ -89,14 +89,15 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <LineChart fx:id="gradeGraph" layoutX="42.0" layoutY="33.0" prefHeight="605.0" prefWidth="683.0" title="Student Grades">
+                        <BarChart fx:id="gradeGraph" layoutX="30.0" layoutY="25.0" prefHeight="650.0" prefWidth="720.0">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" fx:id="xLine" />
                           </xAxis>
                           <yAxis>
-                            <NumberAxis fx:id="yLine" prefHeight="482.0" prefWidth="28.0" side="LEFT" upperBound="95.0" />
+                            <NumberAxis fx:id="yLine" side="LEFT" />
                           </yAxis>
-                        </LineChart>
+                        </BarChart>
+                            <TextField fx:id="studentsGrades" alignment="TOP_CENTER" editable="false" layoutX="750.0" layoutY="25.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="650.0" prefWidth="250.0" />
                      </children>
                   </AnchorPane>
             </content>
