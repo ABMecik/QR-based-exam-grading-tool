@@ -19,11 +19,11 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="choosePdfPathBtn" disable="true" layoutX="252.0" layoutY="412.0" prefHeight="25.0" prefWidth="160.0" text="Choose Exam File">
+                        <Button fx:id="choosePdfPathBtn" disable="true" layoutX="252.0" layoutY="412.0" prefHeight="25.0" prefWidth="160.0" text="Choose Exam Folder">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor></Button>
-                        <Button fx:id="choosePdfFileBtn" disable="true" layoutX="252.0" layoutY="380.0" prefHeight="25.0" prefWidth="160.0" text="Choose Exam">
+                        <Button fx:id="choosePdfFileBtn" disable="true" layoutX="252.0" layoutY="380.0" prefHeight="25.0" prefWidth="160.0" text="Choose Exam File">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor></Button>
@@ -97,7 +97,7 @@
                             <NumberAxis fx:id="yLine" side="LEFT" />
                           </yAxis>
                         </BarChart>
-                            <TextField fx:id="studentsGrades" alignment="TOP_CENTER" editable="false" layoutX="750.0" layoutY="25.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="650.0" prefWidth="250.0" />
+                        <TextArea fx:id="studentsGrades" editable="false" layoutX="750.0" layoutY="25.0" prefHeight="650.0" prefWidth="250.0" />
                      </children>
                   </AnchorPane>
             </content>

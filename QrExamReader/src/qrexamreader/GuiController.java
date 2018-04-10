@@ -4,19 +4,11 @@ import com.google.zxing.NotFoundException;
 import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -24,11 +16,9 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -38,24 +28,15 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.util.Map.Entry;
-import java.util.Set;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TitledPane;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.text.TextFlow;
-import javafx.stage.Window;
-import javax.swing.JOptionPane;
 
 
 /* PDF BOX */
@@ -63,15 +44,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.tools.imageio.ImageIOUtil;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-
-/* EXCEL POI*/
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -131,7 +103,7 @@ public class GuiController implements Initializable {
     private TextField pdfFilePathText;
 
     @FXML
-    private TextField studentsGrades;
+    private TextArea studentsGrades;
 
     @FXML
     private TextField saveToPathText;
@@ -178,7 +150,7 @@ public class GuiController implements Initializable {
     public PrintWriter writer = null;
     public File dataFile = new File("data.txt");
     public File positionFile = new File("position.txt");
-    public File commentFile = new File("exam_comments.txt");
+    public File commentFile = new File("ExamResults.txt");
     public String commentFilePath = null;
     public HashMap<Integer, String> commentMap = new HashMap<Integer, String>();
     public int numberOfQuestion = 0;
@@ -204,7 +176,8 @@ public class GuiController implements Initializable {
                 writer.close();
                 System.out.println("New data file created.");
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("Can't load data information.");
             }
         } else {
             try {
@@ -212,7 +185,8 @@ public class GuiController implements Initializable {
                 loadData();
                 setPage();
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("Can't load data information.");
             }
         }
 
@@ -248,9 +222,9 @@ public class GuiController implements Initializable {
             ExcelWriter excelWriter = new ExcelWriter(openQR, numberOfQuestion, map, questionsPoints, questionsMaxPoints);
             String excelFilePath = null;
             if (isWindows()) {
-                excelFilePath = dataFolderPath.getAbsolutePath() + "\\" + "Result.xslx";
+                excelFilePath = dataFolderPath.getAbsolutePath() + "\\" + "ExamGrades.xslx";
             } else if (isMac()) {
-                excelFilePath = dataFolderPath.getAbsolutePath() + "/" + "Result.xslx";
+                excelFilePath = dataFolderPath.getAbsolutePath() + "/" + "ExamGrades.xlsx";
             }
             try {
                 excelWriter.writeExcel(excelFilePath);
@@ -505,9 +479,9 @@ public class GuiController implements Initializable {
                     return;
                 }
                 if (isWindows()) {
-                    commentFilePath = dataFolderPath.getAbsolutePath() + "\\" + "exam_comments.txt";
+                    commentFilePath = dataFolderPath.getAbsolutePath() + "\\" + "ExamResults.txt";
                 } else if (isMac()) {
-                    commentFilePath = dataFolderPath.getAbsolutePath() + "/" + "exam_comments.txt";
+                    commentFilePath = dataFolderPath.getAbsolutePath() + "/" + "ExamResults.txt";
                 }
                 if (questionCommentText.getText() != null) {
                     storeComment();
@@ -546,16 +520,7 @@ public class GuiController implements Initializable {
     }
 
     private void createGraph() {
-        /*
-        int studentCounter = 1;
-        for (int i = 0; i < openQR.size() - 1; i++) {
-            if (!openQR.get(i).studentName.equals(openQR.get(i + 1).studentName)) {
-                studentCounter++;
-            }
-        }
-        NumberAxis xAxis = new NumberAxis(0,studentCounter,1);
-        NumberAxis yAxis = new NumberAxis(0,100,1);
-        gradeGraph = new LineChart(xAxis, yAxis);*/
+       
         int k = 1;
         XYChart.Series series = new XYChart.Series();
         series.setName("Student Grades");
@@ -569,14 +534,6 @@ public class GuiController implements Initializable {
         for (String key : map.keySet()) {
             studentsGrades.setText(studentsGrades.getText() + key + ":" + String.valueOf(map.get(key)) + "\n");
         }
-
-        //studentsGrades
-        /*
-        int k = 0;
-        for(int value : map.values()){
-            gradeGraph.getData().add(new LineChart.Data<k,value>);
-        }
-         */
     }
 
     private void countTotalQuestion() {
@@ -659,33 +616,9 @@ public class GuiController implements Initializable {
             for (String per : questParts) {
                 newQuestionList.add(per);
             }
-            /*
-            System.out.println(questionParts[0]);
-            System.out.println(questionParts[1]);
-            System.out.println(questionParts[2]);
-            System.out.println(Integer.parseInt(questionParts[3]));
-            System.out.println(questionParts[4]);
-            System.out.println(Integer.parseInt(questionParts[5]));
-            System.out.println(newQuestionList);
-             */
             openQR.add(new QRCode(questionParts[0], questionParts[1], questionParts[2], Integer.parseInt(questionParts[3]), questionParts[4], Integer.parseInt(questionParts[5]), newQuestionList));
         }
     }
-
-    /*
-    public String pdfFilePath = null;
-    public File pdfFolderPath = null;
-    public ArrayList<File> pagePath = new ArrayList();
-    public File pngFolderPath = null;
-    public File dataFolderPath = null;
-    public ArrayList<String> allQuestions = new ArrayList();
-    public ArrayList<Integer> questionsMaxPoints = new ArrayList();
-    public ArrayList<Integer> questionsNumber = new ArrayList();
-    public File selectedDirectory = null;
-    public String examType = null;
-    public ArrayList<QRCode> openQR = new ArrayList();
-
-     */
     private void storeCurrentInfo() {
         try {
             writer = new PrintWriter(positionFile);
@@ -816,20 +749,6 @@ public class GuiController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        /*
-        try {
-            writer = new PrintWriter(commentFilePath);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        commentMap.put(currentPosition, questionCommentText.getText());
-        Set<Entry<Integer, String>> comments = commentMap.entrySet();
-        writer.println("COMMENTS");
-        for (Entry<Integer, String> comment : comments) {
-            writer.println(comment.getKey() + " ==> " + comment.getValue());
-        }
-         */
     }
 
     private static boolean isWindows() {
@@ -1027,6 +946,7 @@ public class GuiController implements Initializable {
         choosePdfPathBtn.setDisable(false);
         excelOptionBtn.setDisable(true);
         commentMap = new HashMap<Integer, String>();
+        QRError = -1;
         pdfFilePath = null;
         pdfFolderPath = null;
         pagePath = new ArrayList();
@@ -1082,7 +1002,6 @@ public class GuiController implements Initializable {
                 Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
         setEndPage();
     }
 
